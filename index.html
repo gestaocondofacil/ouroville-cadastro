@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cadastro de Moradores — Residencial Ouroville</title>
+<style>
+  :root {
+    --verde: #2f5d3f;
+    --verde-claro: #eaf2ec;
+    --verde-borda: #bcd4c3;
+    --texto: #24312a;
+    --texto-suave: #5c6b62;
+    --fundo: #f6f5f1;
+    --branco: #ffffff;
+    --erro: #a33d3d;
+    --erro-fundo: #f9e9e9;
+    --aviso: #8a6d1f;
+    --aviso-fundo: #faf3dd;
+    --raio: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Georgia, "Times New Roman", serif;
+    background: var(--fundo);
+    color: var(--texto);
+    line-height: 1.6;
+    padding: 24px 16px 64px;
+  }
+  .container { max-width: 620px; margin: 0 auto; }
+  header {
+    text-align: center;
+    padding: 28px 20px 22px;
+    border-bottom: 3px double var(--verde);
+    margin-bottom: 24px;
+  }
+  header .condominio {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 6px;
+    font-family: Arial, sans-serif;
+  }
+  header h1 { font-size: 26px; font-weight: normal; }
+  .intro {
+    background: var(--verde-claro);
+    border-left: 4px solid var(--verde);
+    border-radius: 0 var(--raio) var(--raio) 0;
+    padding: 16px 20px;
+    font-size: 15px;
+    margin-bottom: 28px;
+  }
+  .intro strong { display: block; margin-bottom: 6px; }
+  form { background: var(--branco); border: 1px solid #e2e0d8; border-radius: var(--raio); padding: 26px 24px; }
+  .campo { margin-bottom: 18px; }
+  .campo label {
+    display: block;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--texto-suave);
+    margin-bottom: 6px;
+  }
+  .campo label .obrig { color: var(--erro); }
+  .campo input, .campo select {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #cfcdc4;
+    border-radius: var(--raio);
+    padding: 0 12px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    background: var(--branco);
+    color: var(--texto);
+  }
+  .campo input:focus, .campo select:focus {
+    outline: none;
+    border-color: var(--verde);
+    box-shadow: 0 0 0 3px var(--verde-claro);
+  }
+  .campo input[readonly] { background: #f3f2ee; color: var(--texto-suave); }
+  .campo select:disabled { background: #f3f2ee; color: #a9a79e; }
+  .linha { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .linha2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .linha-end { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+  .rua-tag {
+    display: none;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    background: var(--verde-claro);
+    border: 1px solid var(--verde-borda);
+    color: var(--verde);
+    border-radius: var(--raio);
+    padding: 8px 12px;
+    margin: -6px 0 18px;
+  }
+  .rua-tag.mostrar { display: block; }
+  .editar-rua {
+    display: none;
+    background: var(--aviso-fundo);
+    border: 1px solid #e8d9a8;
+    border-radius: var(--raio);
+    padding: 14px 16px;
+    margin: -6px 0 18px;
+  }
+  .editar-rua.mostrar { display: block; }
+  .editar-rua p {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: var(--aviso);
+    margin-bottom: 10px;
+  }
+  .editar-rua select {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #d9c990;
+    border-radius: var(--raio);
+    padding: 0 12px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    background: var(--branco);
+    color: var(--texto);
+  }
+  .btn-editar {
+    display: none;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    background: none;
+    border: none;
+    color: var(--verde);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+    margin: -12px 0 18px;
+  }
+  .btn-editar.mostrar { display: inline-block; }
+  fieldset {
+    border: 1px solid #e2e0d8;
+    border-radius: var(--raio);
+    padding: 14px 16px 10px;
+    margin-bottom: 22px;
+  }
+  fieldset legend {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    color: var(--texto-suave);
+    padding: 0 6px;
+  }
+  .opcao { display: flex; align-items: center; gap: 10px; padding: 7px 2px; cursor: pointer; }
+  .opcao input[type=radio] { width: 18px; height: 18px; accent-color: var(--verde); }
+  .opcao span { font-size: 15px; font-family: Arial, sans-serif; }
+  button.enviar {
+    width: 100%;
+    height: 50px;
+    background: var(--verde);
+    color: var(--branco);
+    border: none;
+    border-radius: var(--raio);
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button.enviar:hover { background: #254b32; }
+  button.enviar:disabled { background: #9db3a4; cursor: wait; }
+  .msg {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: var(--raio);
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+  .msg.erro { display: block; background: var(--erro-fundo); color: var(--erro); border: 1px solid #e5c4c4; }
+  .msg.sucesso { display: block; background: var(--verde-claro); color: var(--verde); border: 1px solid var(--verde-borda); }
+  .sucesso-final { text-align: center; padding: 48px 24px; display: none; }
+  .sucesso-final .check {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--verde-claro); border: 2px solid var(--verde);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px; font-size: 30px; color: var(--verde);
+  }
+  .sucesso-final h2 { font-weight: normal; margin-bottom: 8px; }
+  .sucesso-final p { color: var(--texto-suave); font-size: 15px; }
+  @media (max-width: 520px) {
+    body { padding: 12px 10px 48px; }
+    header { padding: 18px 12px 16px; margin-bottom: 16px; }
+    header h1 { font-size: 21px; }
+    .intro { padding: 14px 16px; font-size: 14px; margin-bottom: 20px; }
+    form { padding: 18px 14px; }
+    .linha { grid-template-columns: 1fr 1fr; }
+    .linha .campo:first-child { grid-column: 1 / -1; }
+    .linha2 { grid-template-columns: 1fr; gap: 0; }
+    .linha-end { grid-template-columns: 1fr; gap: 0; }
+    .campo input, .campo select { height: 50px; }
+    .editar-rua select { height: 50px; }
+    .opcao { padding: 12px 2px; }
+    .opcao input[type=radio] { width: 22px; height: 22px; }
+    button.enviar { height: 54px; font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="condominio">Residencial Ouroville</div>
+    <h1>Atualizacao Cadastral de Moradores</h1>
+  </header>
+  <div class="intro">
+    <strong>Prezado(a),</strong>
+    Estamos realizando a atualizacao do cadastro dos moradores do condominio para
+    aprimorar a identificacao dos destinatarios e garantir o correto direcionamento
+    das encomendas.
+  </div>
+  <form id="form-cadastro">
+    <div class="campo">
+      <label for="nome">Nome completo <span class="obrig">*</span></label>
+      <input type="text" id="nome" autocomplete="name" placeholder="Nome completo do morador">
+    </div>
+    <div class="linha">
+      <div class="campo">
+        <label for="quadra">Quadra <span class="obrig">*</span></label>
+        <select id="quadra"><option value="">Selecione...</option></select>
+      </div>
+      <div class="campo">
+        <label for="lote">Lote <span class="obrig">*</span></label>
+        <select id="lote" disabled><option value="">Selecione...</option></select>
+      </div>
+      <div class="campo">
+        <label for="numero">Numero da casa <span class="obrig">*</span></label>
+        <input type="text" id="numero" inputmode="numeric" placeholder="Ex: 210">
+      </div>
+    </div>
+    <div class="rua-tag" id="rua-tag"></div>
+    <div class="linha-end">
+      <div class="campo">
+        <label for="endereco">Endereco</label>
+        <input type="text" id="endereco" readonly placeholder="Preenchido automaticamente">
+      </div>
+      <div class="campo">
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" readonly placeholder="--">
+      </div>
+    </div>
+    <button type="button" class="btn-editar" id="btn-editar" onclick="toggleEditarRua()">
+      Editar endereco -- o nome da rua esta errado?
+    </button>
+    <div class="editar-rua" id="editar-rua">
+      <p>Caso o nome da rua esteja errado, escolha uma das opcoes abaixo:</p>
+      <select id="rua-manual" onchange="selecionarRuaManual()">
+        <option value="">Selecione a rua correta...</option>
+      </select>
+    </div>
+    <div class="linha2">
+      <div class="campo">
+        <label for="telefone">Telefone com DDD <span class="obrig">*</span></label>
+        <input type="tel" id="telefone" autocomplete="tel" inputmode="tel" placeholder="(12) 99999-9999">
+      </div>
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" autocomplete="email" placeholder="email@exemplo.com">
+      </div>
+    </div>
+    <fieldset>
+      <legend>Condicao <span class="obrig">*</span></legend>
+      <label class="opcao"><input type="radio" name="condicao" value="Morador e Proprietario"><span>Morador e Proprietario</span></label>
+      <label class="opcao"><input type="radio" name="condicao" value="Inquilino"><span>Inquilino</span></label>
+      <label class="opcao"><input type="radio" name="condicao" value="Proprietario"><span>Proprietario</span></label>
+    </fieldset>
+    <button type="button" class="enviar" id="btn-enviar" onclick="enviar()">Enviar cadastro</button>
+    <div class="msg" id="msg"></div>
+  </form>
+  <div class="sucesso-final" id="sucesso-final">
+    <div class="check">&#10003;</div>
+    <h2>Cadastro enviado</h2>
+    <p>Obrigado! Suas informacoes foram registradas com sucesso.</p>
+  </div>
+</div>
+
+<script>
+var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEj_iYkienq3AqRNtjNpM_SVjZW7AdadRpHOUy2Y8Ed89Qso4xNX9SwkiQf_9G-eMnog/exec";
+
+var CEPS = {
+  "Rua Maria Ferrari":"12043-634",
+  "Rua Geraldo Quiririm":"12043-631",
+  "Rua Professor Osny Guarnieri Filho":"12043-628",
+  "Rua Professor Maximo Martins da Cruz":"12043-625",
+  "Rua Coronel Jose Francisco Gomes Figueira":"12043-622",
+  "Rua Olga Medeiros Cassiano":"12043-619",
+  "Rua Nikola Pihtovnikov":"12043-616",
+  "Rua Engenheiro Horacio Ortiz":"12043-613",
+  "Rua Geraldo Nogueira de Barros":"12043-610",
+  "Avenida Provincia Autonoma di Trento":"12043-611",
+  "Rua Professor Ernesto Stumpf":"12043-646",
+  "Rua Professor Oswaldo Collus":"12043-649",
+  "Rua Professor Estevam Madaras":"12043-652",
+  "Rua Jose de Oliveira Barros":"12043-653",
+  "Rua Professor Edu de Matos Ortiz":"12043-643",
+  "Rua Professor Luiz Americo Pastorino":"12043-640"
+};
+
+var TODAS_AS_RUAS = Object.keys(CEPS);
+
+var MAPA = {
+  "A1":[{de:1,ate:11,rua:"Rua Geraldo Quiririm"},{de:12,ate:21,rua:"Rua Maria Ferrari"}],
+  "A2":[{de:1,ate:15,rua:"Rua Professor Osny Guarnieri Filho"},{de:16,ate:29,rua:"Rua Geraldo Quiririm"}],
+  "A3":[{de:1,ate:15,rua:"Rua Professor Maximo Martins da Cruz"},{de:18,ate:30,rua:"Rua Professor Osny Guarnieri Filho"}],
+  "A4":[{de:1,ate:14,rua:"Rua Coronel Jose Francisco Gomes Figueira"},{de:15,ate:28,rua:"Rua Professor Maximo Martins da Cruz"}],
+  "A5":[{de:1,ate:13,rua:"Rua Olga Medeiros Cassiano"},{de:14,ate:26,rua:"Rua Coronel Jose Francisco Gomes Figueira"}],
+  "A6":[{de:1,ate:12,rua:"Rua Nikola Pihtovnikov"},{de:13,ate:24,rua:"Rua Olga Medeiros Cassiano"}],
+  "A7":[{de:1,ate:11,rua:"Rua Engenheiro Horacio Ortiz"},{de:12,ate:22,rua:"Rua Nikola Pihtovnikov"}],
+  "A8":[{de:1,ate:9,rua:"Rua Geraldo Nogueira de Barros"},{de:10,ate:18,rua:"Rua Engenheiro Horacio Ortiz"}],
+  "B3":[{de:1,ate:7,rua:"Rua Geraldo Quiririm"},{de:8,ate:11,rua:"Avenida Provincia Autonoma di Trento"},{de:12,ate:18,rua:"Rua Maria Ferrari"}],
+  "B4":[{de:1,ate:8,rua:"Rua Professor Osny Guarnieri Filho"},{de:9,ate:12,rua:"Avenida Provincia Autonoma di Trento"},{de:13,ate:20,rua:"Rua Geraldo Quiririm"}],
+  "B5":[{de:1,ate:9,rua:"Rua Professor Maximo Martins da Cruz"},{de:10,ate:12,rua:"Avenida Provincia Autonoma di Trento"},{de:13,ate:21,rua:"Rua Professor Osny Guarnieri Filho"}],
+  "B6":[{de:1,ate:10,rua:"Rua Coronel Jose Francisco Gomes Figueira"},{de:11,ate:14,rua:"Avenida Provincia Autonoma di Trento"},{de:15,ate:24,rua:"Rua Professor Maximo Martins da Cruz"}],
+  "B7":[{de:1,ate:11,rua:"Rua Olga Medeiros Cassiano"},{de:12,ate:14,rua:"Avenida Provincia Autonoma di Trento"},{de:16,ate:26,rua:"Rua Coronel Jose Francisco Gomes Figueira"}],
+  "B8":[{de:1,ate:12,rua:"Rua Nikola Pihtovnikov"},{de:13,ate:15,rua:"Avenida Provincia Autonoma di Trento"},{de:16,ate:27,rua:"Rua Olga Medeiros Cassiano"}],
+  "B9":[{de:1,ate:13,rua:"Rua Engenheiro Horacio Ortiz"},{de:14,ate:17,rua:"Avenida Provincia Autonoma di Trento"},{de:18,ate:30,rua:"Rua Nikola Pihtovnikov"}],
+  "B10":[{de:1,ate:12,rua:"Rua Geraldo Nogueira de Barros"},{de:13,ate:16,rua:"Avenida Provincia Autonoma di Trento"},{de:17,ate:28,rua:"Rua Engenheiro Horacio Ortiz"}],
+  "C1":[{de:1,ate:10,rua:"Rua Professor Ernesto Stumpf"},{de:11,ate:20,rua:"Avenida Provincia Autonoma di Trento"}],
+  "C2":[{de:1,ate:10,rua:"Rua Professor Oswaldo Collus"},{de:11,ate:20,rua:"Rua Professor Ernesto Stumpf"}],
+  "C3":[{de:1,ate:6,rua:"Rua Professor Estevam Madaras"},{de:7,ate:13,rua:"Rua Professor Oswaldo Collus"}],
+  "C4":[{de:1,ate:6,rua:"Rua Professor Estevam Madaras"}],
+  "C5":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:14,rua:"Rua Professor Maximo Martins da Cruz"},{de:29,ate:31,rua:"Avenida Provincia Autonoma di Trento"}],
+  "C6":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:14,rua:"Rua Coronel Jose Francisco Gomes Figueira"},{de:15,ate:28,rua:"Rua Professor Maximo Martins da Cruz"},{de:29,ate:31,rua:"Avenida Provincia Autonoma di Trento"}],
+  "C7":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:16,rua:"Rua Olga Medeiros Cassiano"},{de:17,ate:31,rua:"Rua Coronel Jose Francisco Gomes Figueira"},{de:32,ate:33,rua:"Avenida Provincia Autonoma di Trento"}],
+  "C8":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:17,rua:"Rua Nikola Pihtovnikov"},{de:18,ate:33,rua:"Rua Olga Medeiros Cassiano"},{de:34,ate:46,rua:"Avenida Provincia Autonoma di Trento"}],
+  "C9":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:19,rua:"Rua Engenheiro Horacio Ortiz"},{de:20,ate:37,rua:"Rua Nikola Pihtovnikov"},{de:38,ate:40,rua:"Avenida Provincia Autonoma di Trento"}]
+};
+
+var QUADRAS = Object.keys(MAPA).sort(function(a,b){
+  var la=a[0],na=parseInt(a.slice(1)),lb=b[0],nb=parseInt(b.slice(1));
+  return la===lb ? na-nb : la.localeCompare(lb);
+});
+
+var selQ=document.getElementById("quadra");
+var selL=document.getElementById("lote");
+var inpN=document.getElementById("numero");
+var inpE=document.getElementById("endereco");
+var inpCep=document.getElementById("cep");
+var tag=document.getElementById("rua-tag");
+var btnEd=document.getElementById("btn-editar");
+var boxEd=document.getElementById("editar-rua");
+var selRua=document.getElementById("rua-manual");
+
+QUADRAS.forEach(function(q){
+  var o=document.createElement("option");
+  o.value=q; o.textContent=q; selQ.appendChild(o);
+});
+
+TODAS_AS_RUAS.forEach(function(r){
+  var o=document.createElement("option");
+  o.value=r; o.textContent=r; selRua.appendChild(o);
+});
+
+var ruaAtual="", ruaEditada=false;
+
+function lotesDe(q){
+  var set=new Set();
+  (MAPA[q]||[]).forEach(function(f){for(var i=f.de;i<=f.ate;i++)set.add(i);});
+  return Array.from(set).sort(function(a,b){return a-b;});
+}
+
+function ruaDe(q,l){
+  var faixas=MAPA[q]||[];
+  for(var i=0;i<faixas.length;i++) if(l>=faixas[i].de&&l<=faixas[i].ate) return faixas[i].rua;
+  return null;
+}
+
+selQ.addEventListener("change",function(){
+  var q=selQ.value;
+  selL.innerHTML='<option value="">Selecione...</option>';
+  selL.disabled=!q;
+  resetEndereco();
+  if(!q) return;
+  lotesDe(q).forEach(function(l){
+    var o=document.createElement("option");
+    o.value=l; o.textContent="Lote "+l; selL.appendChild(o);
+  });
+});
+
+selL.addEventListener("change",function(){
+  var q=selQ.value,l=parseInt(selL.value);
+  resetEndereco();
+  if(!q||isNaN(l)) return;
+  var rua=ruaDe(q,l);
+  if(rua) definirRua(rua,false);
+});
+
+inpN.addEventListener("input",montarEndereco);
+
+function resetEndereco(){
+  ruaAtual=""; ruaEditada=false;
+  inpE.value=""; inpCep.value="";
+  tag.classList.remove("mostrar");
+  btnEd.classList.remove("mostrar");
+  boxEd.classList.remove("mostrar");
+  selRua.value="";
+}
+
+function definirRua(rua,editada){
+  ruaAtual=rua; ruaEditada=editada;
+  tag.textContent="Endereco encontrado: "+rua;
+  tag.classList.add("mostrar");
+  btnEd.classList.add("mostrar");
+  inpCep.value=CEPS[rua]||"";
+  montarEndereco();
+}
+
+function montarEndereco(){
+  if(!ruaAtual) return;
+  var nr=inpN.value.trim();
+  inpE.value=nr ? ruaAtual+", "+nr : ruaAtual;
+}
+
+function toggleEditarRua(){ boxEd.classList.toggle("mostrar"); }
+
+function selecionarRuaManual(){
+  var rua=selRua.value;
+  if(!rua) return;
+  definirRua(rua,true);
+}
+
+document.getElementById("telefone").addEventListener("input",function(){
+  var v=this.value.replace(/\D/g,"").slice(0,11);
+  if(v.length>6) v="("+v.slice(0,2)+") "+v.slice(2,v.length-4)+"-"+v.slice(-4);
+  else if(v.length>2) v="("+v.slice(0,2)+") "+v.slice(2);
+  else if(v.length>0) v="("+v;
+  this.value=v;
+});
+
+function enviar(){
+  var msg=document.getElementById("msg");
+  var btn=document.getElementById("btn-enviar");
+  msg.className="msg";
+
+  var dados={
+    nome: document.getElementById("nome").value.trim(),
+    quadra: selQ.value,
+    lote: selL.value,
+    numero: inpN.value.trim(),
+    rua: ruaAtual,
+    cep: inpCep.value.trim(),
+    endereco: inpE.value.trim(),
+    ruaEditada: ruaEditada,
+    telefone: document.getElementById("telefone").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    condicao: (document.querySelector('input[name="condicao"]:checked')||{}).value||""
+  };
+
+  if(!dados.nome||!dados.quadra||!dados.lote||!dados.numero||!dados.telefone||!dados.condicao){
+    msg.className="msg erro";
+    msg.textContent="Preencha todos os campos obrigatorios (*) antes de enviar.";
+    return;
+  }
+
+  if(APPS_SCRIPT_URL==="COLE_AQUI_A_URL_DO_APPS_SCRIPT"){
+    msg.className="msg erro";
+    msg.textContent="URL do Apps Script nao configurada. Contate o administrador.";
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent="Enviando...";
+
+  fetch(APPS_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(dados)
+  })
+  .then(function(){
+    document.getElementById("form-cadastro").style.display="none";
+    document.querySelector(".intro").style.display="none";
+    document.getElementById("sucesso-final").style.display="block";
+    window.scrollTo({top:0,behavior:"smooth"});
+  })
+  .catch(function(err){
+    btn.disabled=false;
+    btn.textContent="Enviar cadastro";
+    msg.className="msg erro";
+    msg.textContent="Erro ao enviar. Verifique sua conexao e tente novamente.";
+  });
+}
+</script>
+</body>
+</html>
