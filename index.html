@@ -229,14 +229,14 @@
         <select id="lote" disabled><option value="">Selecione...</option></select>
       </div>
       <div class="campo">
-        <label for="numero">Numero da casa <span class="obrig">*</span></label>
+        <label for="numero">Número da casa <span class="obrig">*</span></label>
         <input type="text" id="numero" inputmode="numeric" placeholder="Ex: 210">
       </div>
     </div>
     <div class="rua-tag" id="rua-tag"></div>
     <div class="linha-end">
       <div class="campo">
-        <label for="endereco">Endereco</label>
+        <label for="endereco">Endereço</label>
         <input type="text" id="endereco" readonly placeholder="Preenchido automaticamente">
       </div>
       <div class="campo">
@@ -245,10 +245,10 @@
       </div>
     </div>
     <button type="button" class="btn-editar" id="btn-editar" onclick="toggleEditarRua()">
-      Editar endereco -- o nome da rua esta errado?
+      ✎ Editar endereço — o nome da rua está errado?
     </button>
     <div class="editar-rua" id="editar-rua">
-      <p>Caso o nome da rua esteja errado, escolha uma das opcoes abaixo:</p>
+      <p>Caso o nome da rua esteja errado, escolha uma das opções abaixo:</p>
       <select id="rua-manual" onchange="selecionarRuaManual()">
         <option value="">Selecione a rua correta...</option>
       </select>
@@ -264,10 +264,10 @@
       </div>
     </div>
     <fieldset>
-      <legend>Condicao <span class="obrig">*</span></legend>
-      <label class="opcao"><input type="radio" name="condicao" value="Morador e Proprietario"><span>Morador e Proprietario</span></label>
+      <legend>Condição <span class="obrig">*</span></legend>
+      <label class="opcao"><input type="radio" name="condicao" value="Morador e Proprietário"><span>Morador e Proprietário</span></label>
       <label class="opcao"><input type="radio" name="condicao" value="Inquilino"><span>Inquilino</span></label>
-      <label class="opcao"><input type="radio" name="condicao" value="Proprietario"><span>Proprietario</span></label>
+      <label class="opcao"><input type="radio" name="condicao" value="Proprietário"><span>Proprietário</span></label>
     </fieldset>
     <button type="button" class="enviar" id="btn-enviar" onclick="enviar()">Enviar cadastro</button>
     <div class="msg" id="msg"></div>
@@ -280,7 +280,7 @@
 </div>
 
 <script>
-var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwEj_iYkienq3AqRNtjNpM_SVjZW7AdadRpHOUy2Y8Ed89Qso4xNX9SwkiQf_9G-eMnog/exec";
+var APPS_SCRIPT_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
 
 var CEPS = {
   "Rua Maria Ferrari":"12043-634",
@@ -324,7 +324,7 @@ var MAPA = {
   "C2":[{de:1,ate:10,rua:"Rua Professor Oswaldo Collus"},{de:11,ate:20,rua:"Rua Professor Ernesto Stumpf"}],
   "C3":[{de:1,ate:6,rua:"Rua Professor Estevam Madaras"},{de:7,ate:13,rua:"Rua Professor Oswaldo Collus"}],
   "C4":[{de:1,ate:6,rua:"Rua Professor Estevam Madaras"}],
-  "C5":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:14,rua:"Rua Professor Maximo Martins da Cruz"},{de:29,ate:31,rua:"Avenida Provincia Autonoma di Trento"}],
+  "C5":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:14,rua:"Rua Professor Maximo Martins da Cruz"},{de:15,ate:28,rua:"Rua Professor Osny Guarnieri Filho"},{de:29,ate:31,rua:"Avenida Provincia Autonoma di Trento"}],
   "C6":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:14,rua:"Rua Coronel Jose Francisco Gomes Figueira"},{de:15,ate:28,rua:"Rua Professor Maximo Martins da Cruz"},{de:29,ate:31,rua:"Avenida Provincia Autonoma di Trento"}],
   "C7":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:16,rua:"Rua Olga Medeiros Cassiano"},{de:17,ate:31,rua:"Rua Coronel Jose Francisco Gomes Figueira"},{de:32,ate:33,rua:"Avenida Provincia Autonoma di Trento"}],
   "C8":[{de:1,ate:1,rua:"Avenida Provincia Autonoma di Trento"},{de:2,ate:17,rua:"Rua Nikola Pihtovnikov"},{de:18,ate:33,rua:"Rua Olga Medeiros Cassiano"},{de:34,ate:46,rua:"Avenida Provincia Autonoma di Trento"}],
